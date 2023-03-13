@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { ROUTHING_PATHS } from "./common/constants/routing.constants";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import RegisterComplete from "./pages/auth/RegisterComplete";
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
             {
                 path: ROUTHING_PATHS.registerComplete,
                 element: <RegisterComplete />
+            },
+            {
+                path: ROUTHING_PATHS.forgotPassword,
+                element: <ForgotPassword />
             }
         ]
     },

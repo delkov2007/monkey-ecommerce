@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { firebaseAuth } from '../../firebase-auth';
 import { LOCAL_STORAGE_KEYS } from "../../common/constants/localstorage.constants";
 import { ROUTHING_PATHS } from "../../common/constants/routing.constants";
-import userStore from "../../store/user.store";
+import { firebaseAuth } from '../../firebase-auth';
+import userStore from "../../stores/user.store";
 
+const { login } = ROUTHING_PATHS;
 
 const RegisterComplete = () => {
+
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -45,7 +48,7 @@ const RegisterComplete = () => {
                 });
 
                 //redirect the user
-                redirect(ROUTHING_PATHS.root);
+                navigate(login);
             }
         }
         catch (error) {
@@ -76,6 +79,7 @@ const RegisterComplete = () => {
                             onChange={onChangePassword}
                             placeholder="Password"
                             autoFocus />
+                        {/* TODO CHANGE THE BUTTON AND ADD LOADING INDICATOR */}
                         <button
                             type="submit"
                             className="btn btn-raised">
