@@ -4,21 +4,30 @@ import {
     AppstoreOutlined,
     UserOutlined,
     UserAddOutlined,
-    SettingOutlined
+    SettingOutlined,
+    LogoutOutlined
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 import { ROUTHING_PATHS } from '../../common/constants/routing.constants';
+import { firebaseAuth } from '../../firebase-auth';
+import userStore from '../../store/user.store';
 
 const { SubMenu } = Menu;
 const { root, login, register } = ROUTHING_PATHS;
 
 const Header = () => {
     const [current, setCurrent] = useState('');
-    const onClick = (e) => {
+    const onClickMenuItem = (e) => {
         setCurrent(e.key);
     };
+    const onLogout = () => {
+        firebaseAuth.signOut();
+        userStore.setUser(userStore.initialState);
+        redirect(ROUTHING_PATHS.login);
+    };
+
     return (
-        <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" className="nav-container">
+        <Menu onClick={onClickMenuItem} selectedKeys={[current]} mode="horizontal" className="nav-container">
             <Menu.Item key="home" icon={<AppstoreOutlined />}>
                 <Link to={root}>Home</Link>
             </Menu.Item>
@@ -26,8 +35,15 @@ const Header = () => {
                 <Menu.Item key="option:1">
                     Option 1
                 </Menu.Item>
-                <Menu.Item key="option:2">
+                <Menu.Item
+                    key="option:2">
                     Option 2
+                </Menu.Item>
+                <Menu.Item
+                    key="logout"
+                    icon={<LogoutOutlined />}
+                    onClick={onLogout}>
+                    Logout
                 </Menu.Item>
             </SubMenu>
             <Menu.Item key="register" icon={<UserAddOutlined />}>
