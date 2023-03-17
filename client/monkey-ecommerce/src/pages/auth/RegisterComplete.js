@@ -4,9 +4,10 @@ import { toast } from "react-toastify";
 import { LOCAL_STORAGE_KEYS } from "../../common/constants/localstorage.constants";
 import { ROUTHING_PATHS } from "../../common/constants/routing.constants";
 import { firebaseAuth } from '../../firebase-auth';
+import { createOrUpdateUser } from "../../services/auth";
 import userStore from "../../stores/user.store";
 
-const { login } = ROUTHING_PATHS;
+const { login, root } = ROUTHING_PATHS;
 
 const RegisterComplete = () => {
 
@@ -40,15 +41,21 @@ const RegisterComplete = () => {
                 const user = firebaseAuth.currentUser;
                 await user.updatePassword(password);
                 const idTokenResult = await user.getIdTokenResult();
+                createOrUpdateUser(idTokenResult.token)
+                    .then(res => {
+                        userStore.setUser({
+                            _id: res.data._id,
+                            name: res.data.name,
+                            email: res.data.email,
+                            token: idTokenResult.token,
+                            role: res.data.role,
+                            isAuthenticated: true
+                        });
 
-                //some kind of store
-                userStore.setUser({
-                    email: 'delkov@live.com', //TODO replace with real
-                    token: 'token...'
-                });
-
-                //redirect the user
-                navigate(login);
+                        //redirect the user
+                        navigate(root);
+                    })
+                    .catch(error => console.log(error));
             }
         }
         catch (error) {

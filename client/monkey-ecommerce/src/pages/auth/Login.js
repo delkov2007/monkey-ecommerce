@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ROUTHING_PATHS } from "../../common/constants/routing.constants";
 import { firebaseAuth } from "../../firebase-auth";
+import { createOrUpdateUser } from "../../services/auth";
 import userStore from "../../stores/user.store";
 
 const { root, forgotPassword } = ROUTHING_PATHS;
@@ -26,13 +27,23 @@ const Login = () => {
             const result = await firebaseAuth.signInWithEmailAndPassword(email, password);
             const { user } = result;
             const idTokenResult = await user.getIdTokenResult();
-            userStore.setUser({
-                email: user.email,
-                token: idTokenResult.token,
-                isAuthenticated: true
-            });
-            setIsLoading(false);
-            navigate(root);
+            createOrUpdateUser(idTokenResult.token)
+                .then(res => {
+                    console.log(res.data);
+                    userStore.setUser({
+                        _id: res.data._id,
+                        name: res.data.name,
+                        email: res.data.email,
+                        token: idTokenResult.token,
+                        role: res.data.role,
+                        isAuthenticated: true
+                    });
+                    navigate(root);
+                })
+                .catch(error => console.log(`CreateOrUpdateUser error => `, error))
+                .finally(() => {
+                    setIsLoading(false);
+                });
         }
         catch (error) {
             console.log(`Login Error --> `, error);

@@ -10,6 +10,7 @@ const Register = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (e) => {
+        debugger;
         e.preventDefault();
         setIsLoading(true);
 
@@ -46,7 +47,7 @@ const Register = () => {
             <div className="row">
                 <div className="col-md-6 offset-md-3">
                     <h4>Register</h4>
-                    <form onSubmit={onSubmit}>
+                    <form>
                         <div className="form-group">
                             <input
                                 type="email"
@@ -61,6 +62,7 @@ const Register = () => {
                                 className="mt-3 w-100"
                                 size="large"
                                 loading={isLoading}
+                                onClick={onSubmit}
                             >
                                 Register
                             </Button>
