@@ -1,16 +1,17 @@
 import { Button } from "antd";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ROUTHING_PATHS } from "../../common/constants/routing.constants";
 import { firebaseAuth } from "../../firebase-auth";
-import { createOrUpdateUser, redirectBaseOnRole } from "../../services/auth";
-import userStore from "../../stores/user.store";
+import { createOrUpdateUser, redirectBaseOnRole } from "../../functions/auth";
+import { loggedInUser } from "../../reducers/user-reducer";
 
 const { forgotPassword } = ROUTHING_PATHS;
 
 const Login = () => {
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,14 +31,15 @@ const Login = () => {
             createOrUpdateUser(idTokenResult.token)
                 .then(res => {
                     console.log(res.data);
-                    userStore.setUser({
+                    const user = {
                         _id: res.data._id,
                         name: res.data.name,
                         email: res.data.email,
                         token: idTokenResult.token,
                         role: res.data.role,
                         isAuthenticated: true
-                    });
+                    };
+                    dispatch(loggedInUser(user));
                     redirectBaseOnRole({ role: res.data.role, navigate: navigate });
                 })
                 .catch(error => console.log(`CreateOrUpdateUser error => `, error))

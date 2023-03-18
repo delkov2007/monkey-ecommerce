@@ -3,28 +3,24 @@ import {
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTHING_PATHS } from '../../common/constants/routing.constants';
 import { firebaseAuth } from '../../firebase-auth';
-import userStore from '../../stores/user.store';
+import { logoutUser } from '../../reducers/user-reducer';
 
 const { SubMenu, Item } = Menu;
 const { root, login, register } = ROUTHING_PATHS;
 
 const Header = () => {
-
+    const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [user, setUser] = useState(userStore.initialState);
     const [current, setCurrent] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const subscription = userStore.subscribe(setUser);
-
-        return () => subscription.unsubscribe();
-    }, []);
-
-    useEffect(() => {
+        debugger;
         console.log(user);
         setIsAuthenticated(user.isAuthenticated);
     }, [user]);
@@ -35,7 +31,7 @@ const Header = () => {
 
     const onLogout = () => {
         firebaseAuth.signOut();
-        userStore.setUser(userStore.initialState);
+        dispatch(logoutUser());
         navigate(login);
     };
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ROUTHING_PATHS } from "../common/constants/routing.constants";
+import USER_ROLES from "../common/constants/user-roles.constant";
 
 const { user, history, admin, dashboard } = ROUTHING_PATHS;
 
@@ -42,12 +43,5 @@ const addHeaderToken = (token) => {
         authtoken: token
     };
 };
-
-const USER_ROLES = {
-    subscriber: 'subscriber',
-    admin: 'admin'
-};
-
-
 
 export { createOrUpdateUser, currentUser, redirectBaseOnRole };

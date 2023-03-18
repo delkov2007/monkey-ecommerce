@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LOCAL_STORAGE_KEYS } from "../../common/constants/localstorage.constants";
 import { ROUTHING_PATHS } from "../../common/constants/routing.constants";
 import { firebaseAuth } from '../../firebase-auth';
-import { createOrUpdateUser } from "../../services/auth";
-import userStore from "../../stores/user.store";
+import { createOrUpdateUser } from "../../functions/auth";
+import { loggedInUser } from "../../reducers/user-reducer";
 
 const { login, root } = ROUTHING_PATHS;
 
 const RegisterComplete = () => {
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -43,15 +44,15 @@ const RegisterComplete = () => {
                 const idTokenResult = await user.getIdTokenResult();
                 createOrUpdateUser(idTokenResult.token)
                     .then(res => {
-                        userStore.setUser({
+                        const user = {
                             _id: res.data._id,
                             name: res.data.name,
                             email: res.data.email,
                             token: idTokenResult.token,
                             role: res.data.role,
                             isAuthenticated: true
-                        });
-
+                        };
+                        dispatch(loggedInUser(user));
                         //redirect the user
                         navigate(root);
                     })
