@@ -26,6 +26,14 @@ export const router = createBrowserRouter([
             {
                 path: ROUTHING_PATHS.forgotPassword,
                 element: <ForgotPassword />
+            },
+            {
+                path: `${ROUTHING_PATHS.admin}/${ROUTHING_PATHS.dashboard}`,
+                element: <h1>Admin Dashboard</h1>
+            },
+            {
+                path: `${ROUTHING_PATHS.user}/${ROUTHING_PATHS.history}`,
+                element: <h1>User History</h1>
             }
         ]
     },

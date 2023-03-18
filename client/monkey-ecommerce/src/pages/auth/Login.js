@@ -4,10 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ROUTHING_PATHS } from "../../common/constants/routing.constants";
 import { firebaseAuth } from "../../firebase-auth";
-import { createOrUpdateUser } from "../../services/auth";
+import { createOrUpdateUser, redirectBaseOnRole } from "../../services/auth";
 import userStore from "../../stores/user.store";
 
-const { root, forgotPassword } = ROUTHING_PATHS;
+const { forgotPassword } = ROUTHING_PATHS;
 
 const Login = () => {
 
@@ -38,7 +38,7 @@ const Login = () => {
                         role: res.data.role,
                         isAuthenticated: true
                     });
-                    navigate(root);
+                    redirectBaseOnRole({ role: res.data.role, navigate: navigate });
                 })
                 .catch(error => console.log(`CreateOrUpdateUser error => `, error))
                 .finally(() => {

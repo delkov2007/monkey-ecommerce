@@ -25,8 +25,7 @@ const Header = () => {
     }, []);
 
     useEffect(() => {
-        debugger;
-        console.log(user.isAuthenticated);
+        console.log(user);
         setIsAuthenticated(user.isAuthenticated);
     }, [user]);
 
