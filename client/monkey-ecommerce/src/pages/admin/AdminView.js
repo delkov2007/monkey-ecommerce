@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
-import UserNav from "../../components/nav/UserNav";
+import AdminNav from "../../components/nav/AdminNav";
 
-const UserView = () => {
+const AdminView = () => {
     return (
         <div className="container-fluid">
             <div className="row">
                 <div className="col-md-2">
-                    <UserNav />
+                    <AdminNav />
                 </div>
                 <div className="col">
                     <Outlet />
@@ -16,4 +16,4 @@ const UserView = () => {
     );
 };
 
-export default UserView;
+export default AdminView;

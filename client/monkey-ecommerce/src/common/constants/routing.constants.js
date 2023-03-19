@@ -9,7 +9,9 @@ const ROUTHING_PATHS = {
     dashboard: 'dashboard',
     user: 'user',
     history: 'history',
-    unauthorized: 'unauthorized'
+    password: 'password',
+    wishlist: 'wishlist',
+    unauthorized: 'unauthorized',
 };
 
 export { ROUTHING_PATHS };

@@ -1,19 +1,23 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ROUTHING_PATHS } from "./common/constants/routing.constants";
 import USER_ROLES from "./common/constants/user-roles.constant";
 import Unauthorized from "./components/error/Unautorized";
 import RequireAuth from "./components/guards/RequireAuth";
 import Layout from "./components/layouts/Layout";
 import { firebaseAuth } from "./firebase-auth";
-import { currentUser, redirectBaseOnRole } from "./functions/auth";
+import { currentUser } from "./functions/auth";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminView from "./pages/admin/AdminView";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import RegisterComplete from "./pages/auth/RegisterComplete";
 import History from "./pages/user/History";
+import Password from "./pages/user/Password";
 import UserView from "./pages/user/UserView";
+import Wishlist from "./pages/user/Wishlist";
 import { loggedInUser } from "./reducers/user-reducer";
 
 const {
@@ -24,13 +28,15 @@ const {
     forgotPassword,
     user,
     history,
+    password,
+    wishlist,
+    admin,
+    dashboard,
     unauthorized
 } = ROUTHING_PATHS;
 
 const App = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const location = useLocation();
     useEffect(() => {
         const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -47,19 +53,13 @@ const App = () => {
                             isAuthenticated: true
                         };
                         dispatch(loggedInUser(user));
-                        // const navOptions = { state: { location }, replace: true };
-                        // redirectBaseOnRole({ role: res.data.role, navigate, navOptions });
                     })
                     .catch(error => console.log(`CurrentUser error => `, error));
             }
         });
 
         return unsubscribe();
-    }, []);
-
-    const loader = async (...args) => {
-        debugger;
-    };
+    }, [dispatch]);
 
     return (
         <Routes>
@@ -74,8 +74,21 @@ const App = () => {
 
                 {/* UserRoutes */}
                 <Route path={`${root}/${user}`} element={<UserView />} >
-                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} loader={loader} />} >
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.subscriber]} />} >
                         <Route path={history} element={<History />} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.subscriber]} />} >
+                        <Route path={password} element={<Password />} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.subscriber]} />} >
+                        <Route path={wishlist} element={<Wishlist />} />
+                    </Route>
+                </Route>
+
+                {/* AdminRoutes */}
+                <Route path={`${root}/${admin}`} element={<AdminView />} >
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={dashboard} element={<AdminDashboard />} />
                     </Route>
                 </Route>
 
