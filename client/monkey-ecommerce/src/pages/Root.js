@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ROUTHING_PATHS } from "../common/constants/routing.constants";
-import UserRoutesGuard from "../components/guards/UserRoutesGuard";
+import RequireAuth from "../components/guards/RequireAuth";
 import Header from "../components/nav/Header";
 import { firebaseAuth } from "../firebase-auth";
 import { currentUser } from "../functions/auth";
@@ -15,10 +15,10 @@ import Register from "./auth/Register";
 import RegisterComplete from "./auth/RegisterComplete";
 import Home from "./home/Home";
 import History from "./user/History";
+import UserView from "./user/UserView";
 
 const {
     root,
-    home,
     login,
     register,
     registerComplete,
@@ -52,7 +52,7 @@ const Root = () => {
         });
 
         return unsubscribe();
-    }, []);
+    });
 
     return (
         <>
@@ -60,7 +60,7 @@ const Root = () => {
             <ToastContainer />
             <Routes>
                 <Route
-                    path={root}
+                    path={`${root}`}
                     element={<Home />}
                 />
                 <Route
@@ -79,14 +79,17 @@ const Root = () => {
                     path={`/${forgotPassword}`}
                     element={<ForgotPassword />}
                 />
-                <Route
-                    path={`/${user}/${history}`}
-                    element={
-                        <UserRoutesGuard>
-                            <History />
-                        </UserRoutesGuard>
-                    }
-                />
+                <Route path={`/${user}`} element={<UserView />}>
+                    <Route
+                        path={`${history}`}
+                        element={
+                            <RequireAuth>
+                                <History />
+                            </RequireAuth>
+                        }
+                    />
+                </Route>
+
             </Routes>
         </>
     );

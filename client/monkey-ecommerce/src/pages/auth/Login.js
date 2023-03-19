@@ -39,6 +39,7 @@ const Login = () => {
                         role: res.data.role,
                         isAuthenticated: true
                     };
+                    debugger;
                     dispatch(loggedInUser(user));
                     redirectBaseOnRole({ role: res.data.role, navigate: navigate });
                 })

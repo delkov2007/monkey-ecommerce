@@ -8,7 +8,7 @@ import { firebaseAuth } from '../../firebase-auth';
 import { createOrUpdateUser } from "../../functions/auth";
 import { loggedInUser } from "../../reducers/user-reducer";
 
-const { login, root } = ROUTHING_PATHS;
+const { root } = ROUTHING_PATHS;
 
 const RegisterComplete = () => {
     const dispatch = useDispatch();

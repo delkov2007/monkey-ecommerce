@@ -13,15 +13,14 @@ const { SubMenu, Item } = Menu;
 const { root, login, register } = ROUTHING_PATHS;
 
 const Header = () => {
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => ({ ...state.user }));
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [current, setCurrent] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        debugger;
-        console.log(user);
+        // console.log(user);
         setIsAuthenticated(user.isAuthenticated);
     }, [user]);
 

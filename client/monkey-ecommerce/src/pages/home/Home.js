@@ -1,9 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Home = () => {
-    const navigate = useNavigate();
+    debugger;
+    const user = useSelector(state => ({ ...state?.user }));
+
+    useEffect(() => {
+        debugger;
+    }, [user]);
     return (
-        <h1>Home page</h1>
+        <></>
     );
 };
 

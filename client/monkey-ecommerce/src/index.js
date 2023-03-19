@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import App from './App';
 import './index.css';
-import Root from './pages/Root';
 import reportWebVitals from './reportWebVitals';
 import store from './stores/store';
 
@@ -11,7 +11,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Root />
+      <Routes>
+        <Route path="/*" element={<App />} />
+      </Routes>
     </BrowserRouter>
   </Provider>
 

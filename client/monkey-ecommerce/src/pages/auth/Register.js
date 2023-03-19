@@ -10,7 +10,7 @@ const Register = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (e) => {
-        debugger;
+        // debugger;
         e.preventDefault();
         setIsLoading(true);
 
@@ -19,7 +19,7 @@ const Register = () => {
             handleCodeInApp: true
         };
 
-        debugger;
+        // debugger;
         await firebaseAuth.sendSignInLinkToEmail(email, config)
             .finally(() => {
                 setIsLoading(false);

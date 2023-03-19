@@ -26,14 +26,15 @@ const currentUser = async (token, payload = {}) => {
     );
 };
 
-const redirectBaseOnRole = ({ role, navigate }) => {
+const redirectBaseOnRole = ({ role, navigate, navigationOptions = {} }) => {
+    debugger;
     switch (role) {
         case USER_ROLES.admin:
-            navigate(`/${admin}/${dashboard}`);
+            navigate(`/${admin}/${dashboard}`, navigationOptions);
             break;
         case USER_ROLES.subscriber:
         default:
-            navigate(`/${user}/${history}`);
+            navigate(`/${user}/${history}`, navigationOptions);
             break;
     }
 };
