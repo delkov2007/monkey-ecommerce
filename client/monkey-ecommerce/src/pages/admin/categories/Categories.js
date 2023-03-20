@@ -2,26 +2,44 @@ import {
     DeleteOutlined, EditOutlined
 } from '@ant-design/icons';
 import { Modal } from 'antd';
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { ROUTHING_PATHS } from '../../../common/constants/routing.constants';
+import LocalFilter from '../../../components/LocalFilter';
 import { deleteCategory, getCategoryList } from '../../../functions/category';
 import CategoryCreate from "./CategoryCreate";
+
+const {
+    admin,
+    category
+} = ROUTHING_PATHS;
 
 const Categories = () => {
     const user = useSelector(state => ({ ...state.user }));
     const [categories, setCategories] = useState([]);
-    const [category, setCategory] = useState({});
+    const [createdCategory, setCreatedCategory] = useState({});
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState({});
 
-    const loadCategories = useCallback(() => {
+    const [search, setSearch] = useState('');
+
+    const loadCategories = () => {
         getCategoryList(user.token)
             .then(res => {
                 setCategories(res.data);
             });
-    }, [user]);
+    };
+
+    useEffect(() => {
+        loadCategories();
+    }, []);
+
+    useEffect(() => {
+        loadCategories();
+    }, [createdCategory]);
 
     const onDeleteCategory = (c) => {
         setOpenModal(true);
@@ -50,22 +68,21 @@ const Categories = () => {
             });
     };
 
-    useEffect(() => {
-        loadCategories();
-    }, [loadCategories]);
-
-    useEffect(() => {
-        !!category && loadCategories();
-    }, [category, loadCategories]);
+    const filtered = (search) => (category) => category.name.toLowerCase().includes(search);
 
     return (
         <div className="container mt-3">
             <CategoryCreate
-                setState={setCategory}
+                setState={setCreatedCategory}
+            />
+
+            <LocalFilter
+                search={search}
+                setSearch={setSearch}
             />
             <hr />
             {
-                categories && categories?.map(c => (
+                categories && categories?.filter(filtered(search)).map(c => (
                     <div className='d-flex justify-content-between alert alert-secondary' key={c._id}>
                         <div>
                             {c.name}
@@ -74,9 +91,11 @@ const Categories = () => {
                             <span className="btn btn-sm float-right" onClick={() => onDeleteCategory(c)}>
                                 <DeleteOutlined className="text-danger" />
                             </span>
-                            <span className="btn btn-sm float-right">
-                                <EditOutlined className="text-warning" />
-                            </span>
+                            <Link to={`/${admin}/${category}/${c.slug}`}>
+                                <span className="btn btn-sm float-right">
+                                    <EditOutlined className="text-warning" />
+                                </span>
+                            </Link>
                         </div>
                     </div>
                 ))

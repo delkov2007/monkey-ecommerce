@@ -20,6 +20,7 @@ import UserView from "./pages/user/UserView";
 import Wishlist from "./pages/user/Wishlist";
 import { loggedInUser } from "./reducers/user-reducer";
 import Categories from "./pages/admin/categories/Categories";
+import CategoryUpdate from "./pages/admin/categories/CategoryUpdate";
 
 const {
     root,
@@ -104,6 +105,9 @@ const App = () => {
                     </Route>
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
                         <Route path={category} element={<Categories />} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={`${category}/:slug`} element={<CategoryUpdate />} />
                     </Route>
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
                         <Route path={subCategory} element={<h1>Sub Category</h1>} />
