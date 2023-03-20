@@ -1,19 +1,20 @@
-import firebase from 'firebase/compat/app'
+import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: "AIzaSyAgSCj_JQVTeof6PKrRmDzhudQcOqeXEVA",
-	authDomain: "monkey-ecommerce.firebaseapp.com",
-	projectId: "monkey-ecommerce",
-	storageBucket: "monkey-ecommerce.appspot.com",
-	messagingSenderId: "497497395938",
-	appId: "1:497497395938:web:18f58f9b3bb769eda004bb"
+	apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+	authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+	projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+	storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+	appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
+debugger;
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig)
+firebase.initializeApp(firebaseConfig);
 
 const firebaseAuth = firebase.auth();
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
