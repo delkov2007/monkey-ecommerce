@@ -10,7 +10,6 @@ const {
 } = ROUTHING_PATHS;
 
 const RequireAuth = ({ allowedRoles }) => {
-    debugger;
     const user = useSelector(state => ({ ...state.user }));
     const location = useLocation();
     const [isLoading, setIsLoading] = useState(true);

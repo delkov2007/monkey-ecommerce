@@ -8,7 +8,7 @@ import RequireAuth from "./components/guards/RequireAuth";
 import Layout from "./components/layouts/Layout";
 import { firebaseAuth } from "./firebase-auth";
 import { currentUser } from "./functions/auth";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import Dashboard from "./pages/admin/Dashboard";
 import AdminView from "./pages/admin/AdminView";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import Login from "./pages/auth/Login";
@@ -19,6 +19,7 @@ import Password from "./pages/user/Password";
 import UserView from "./pages/user/UserView";
 import Wishlist from "./pages/user/Wishlist";
 import { loggedInUser } from "./reducers/user-reducer";
+import Categories from "./pages/admin/categories/Categories";
 
 const {
     root,
@@ -32,7 +33,12 @@ const {
     wishlist,
     admin,
     dashboard,
-    unauthorized
+    unauthorized,
+    product,
+    products,
+    category,
+    subCategory,
+    coupons
 } = ROUTHING_PATHS;
 
 const App = () => {
@@ -88,7 +94,25 @@ const App = () => {
                 {/* AdminRoutes */}
                 <Route path={`${root}/${admin}`} element={<AdminView />} >
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
-                        <Route path={dashboard} element={<AdminDashboard />} />
+                        <Route path={dashboard} element={<Dashboard />} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={product} element={<h1>Product</h1>} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={products} element={<h1>Products</h1>} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={category} element={<Categories />} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={subCategory} element={<h1>Sub Category</h1>} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={coupons} element={<h1>Coupons</h1>} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={password} element={<Password />} />
                     </Route>
                 </Route>
 

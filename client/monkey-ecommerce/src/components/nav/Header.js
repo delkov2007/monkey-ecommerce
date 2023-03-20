@@ -6,23 +6,31 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTHING_PATHS } from '../../common/constants/routing.constants';
+import USER_ROLES from '../../common/constants/user-roles.constant';
 import { firebaseAuth } from '../../firebase-auth';
 import { logoutUser } from '../../reducers/user-reducer';
 
 const { SubMenu, Item } = Menu;
-const { root, login, register } = ROUTHING_PATHS;
+const {
+    root,
+    login,
+    register,
+    admin,
+    dashboard,
+    user,
+    history,
+} = ROUTHING_PATHS;
 
 const Header = () => {
-    const user = useSelector(state => ({ ...state.user }));
+    const currentUser = useSelector(state => ({ ...state.user }));
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [current, setCurrent] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        // console.log(user);
-        setIsAuthenticated(user.isAuthenticated);
-    }, [user]);
+        setIsAuthenticated(currentUser.isAuthenticated);
+    }, [currentUser]);
 
     const onClickMenuItem = (e) => {
         setCurrent(e.key);
@@ -41,14 +49,22 @@ const Header = () => {
             </Item>
             {
                 isAuthenticated &&
-                <SubMenu key="username" icon={<SettingOutlined />} title={user.email}>
-                    <Item key="option:1">
-                        Option 1
-                    </Item>
-                    <Item
-                        key="option:2">
-                        Option 2
-                    </Item>
+                <SubMenu key="username" icon={<SettingOutlined />} title={currentUser.email}>
+
+                    {
+                        currentUser && currentUser.role === USER_ROLES.admin &&
+                        <Item>
+                            <Link to={`/${admin}/${dashboard}`}>Dashboard</Link>
+                        </Item>
+                    }
+
+                    {
+                        currentUser && currentUser.role === USER_ROLES.subscriber &&
+                        <Item>
+                            <Link to={`/${user}/${history}`}>Dashboard</Link>
+                        </Item>
+                    }
+
                     <Item
                         key="logout"
                         icon={<LogoutOutlined />}

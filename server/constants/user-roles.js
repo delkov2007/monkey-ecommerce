@@ -3,4 +3,4 @@ const USER_ROLES = {
     admin: 'admin'
 };
 
-exports = USER_ROLES; 
+module.exports = USER_ROLES; 

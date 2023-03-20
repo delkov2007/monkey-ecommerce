@@ -11,6 +11,11 @@ const ROUTHING_PATHS = {
     history: 'history',
     password: 'password',
     wishlist: 'wishlist',
+    product: 'product',
+    products: 'products',
+    category: 'category',
+    subCategory: 'sub-category',
+    coupons: 'coupons',
     unauthorized: 'unauthorized',
 };
 

@@ -7,9 +7,9 @@ const { authCheck, adminCheck } = require('../middlewares/auth');
 //Controllers
 const { create, readAll, read, update, remove } = require('../controllers/category');
 
+router.post('/categories', authCheck, adminCheck, create);
 router.get('/categories', readAll);
 router.get('/categories/:slug', authCheck, adminCheck, read);
-router.post('/categories/:slug', authCheck, adminCheck, create);
 router.put('/categories/:slug', authCheck, adminCheck, update);
 router.delete('/categories/:slug', authCheck, adminCheck, remove);
 
