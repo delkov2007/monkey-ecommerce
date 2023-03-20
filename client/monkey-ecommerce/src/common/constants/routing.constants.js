@@ -14,7 +14,7 @@ const ROUTHING_PATHS = {
     product: 'product',
     products: 'products',
     category: 'category',
-    subCategory: 'sub-category',
+    subCategory: 'sub',
     coupons: 'coupons',
     unauthorized: 'unauthorized',
 };

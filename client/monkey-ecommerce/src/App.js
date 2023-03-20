@@ -21,6 +21,8 @@ import Wishlist from "./pages/user/Wishlist";
 import { loggedInUser } from "./reducers/user-reducer";
 import Categories from "./pages/admin/categories/Categories";
 import CategoryUpdate from "./pages/admin/categories/CategoryUpdate";
+import SubUpdate from "./pages/admin/subs/SubUpdate";
+import Subs from "./pages/admin/subs/Subs";
 
 const {
     root,
@@ -110,7 +112,10 @@ const App = () => {
                         <Route path={`${category}/:slug`} element={<CategoryUpdate />} />
                     </Route>
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
-                        <Route path={subCategory} element={<h1>Sub Category</h1>} />
+                        <Route path={subCategory} element={<Subs />} />
+                    </Route>
+                    <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
+                        <Route path={`${subCategory}/:slug`} element={<SubUpdate />} />
                     </Route>
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
                         <Route path={coupons} element={<h1>Coupons</h1>} />

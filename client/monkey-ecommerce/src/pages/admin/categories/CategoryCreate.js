@@ -36,7 +36,7 @@ const CategoryCreate = ({
             .then(res => {
                 setCategoryName('');
                 toast.success('Category created successfully');
-                if (!!setState) setState(res);
+                if (!!setState) setState(!!res);
             })
             .catch(err => {
                 console.log(err);

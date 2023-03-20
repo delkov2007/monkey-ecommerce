@@ -8,43 +8,42 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ROUTHING_PATHS } from '../../../common/constants/routing.constants';
 import LocalFilter from '../../../components/LocalFilter';
-import { deleteCategory, getCategoryList } from '../../../functions/category';
-import CategoryCreate from "./CategoryCreate";
+import { deleteSub, getSubList } from '../../../functions/sub';
+import SubCreate from './SubCreate';
 
 const {
     admin,
-    category
+    subCategory
 } = ROUTHING_PATHS;
 
-const Categories = () => {
+const Subs = () => {
     const user = useSelector(state => ({ ...state.user }));
-    const [categories, setCategories] = useState([]);
-    const [createdCategory, setCreatedCategory] = useState(false);
+    const [subs, setSubs] = useState([]);
+    const [createdSub, setCreatedSub] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState({});
+    const [selectedSub, setSelectedSub] = useState({});
 
     const [search, setSearch] = useState('');
 
-    const loadCategories = () => {
-        getCategoryList(user.token)
+    const loadSubs = () => {
+        getSubList(user.token)
             .then(res => {
-                setCategories(res.data);
-                setCreatedCategory(false);
+                setSubs(res.data);
             });
     };
 
     useEffect(() => {
-        loadCategories();
+        loadSubs();
     }, []);
 
     useEffect(() => {
-        createdCategory && loadCategories();
-    }, [createdCategory]);
+        createdSub && loadSubs();
+    }, [createdSub]);
 
-    const onDeleteCategory = (c) => {
+    const onDeleteSub = (s) => {
         setOpenModal(true);
-        setSelectedCategory(c);
+        setSelectedSub(s);
     };
 
     const onDeleteCancel = () => {
@@ -53,28 +52,28 @@ const Categories = () => {
 
     const onOkDeleteClick = () => {
         setLoading(true);
-        const { name, slug } = selectedCategory;
-        deleteCategory(slug, user.token)
+        const { name, slug } = selectedSub;
+        deleteSub(slug, user.token)
             .then(res => {
                 toast.success(`${name} deleted successfully`);
-                loadCategories();
+                loadSubs();
             })
             .catch(err => {
-                toast.err(`Error deleting category ${name}`);
+                toast.err(`Error deleting sub category ${name}`);
             })
             .finally(() => {
-                setSelectedCategory({});
+                setSelectedSub({});
                 setOpenModal(false);
                 setLoading(false);
             });
     };
 
-    const filtered = (search) => (category) => category.name.toLowerCase().includes(search);
+    const filtered = (search) => (sub) => sub.name.toLowerCase().includes(search);
 
     return (
         <div className="container mt-3">
-            <CategoryCreate
-                setState={setCreatedCategory}
+            <SubCreate
+                setState={setCreatedSub}
             />
 
             <LocalFilter
@@ -83,16 +82,16 @@ const Categories = () => {
             />
             <hr />
             {
-                categories && categories?.filter(filtered(search)).map(c => (
-                    <div className='d-flex justify-content-between alert alert-secondary' key={c._id}>
+                subs && subs?.filter(filtered(search)).map(s => (
+                    <div className='d-flex justify-content-between alert alert-secondary' key={s._id}>
                         <div>
-                            {c.name}
+                            {s.name}
                         </div>
                         <div>
-                            <span className="btn btn-sm float-right" onClick={() => onDeleteCategory(c)}>
+                            <span className="btn btn-sm float-right" onClick={() => onDeleteSub(s)}>
                                 <DeleteOutlined className="text-danger" />
                             </span>
-                            <Link to={`/${admin}/${category}/${c.slug}`}>
+                            <Link to={`/${admin}/${subCategory}/${s.slug}`}>
                                 <span className="btn btn-sm float-right">
                                     <EditOutlined className="text-warning" />
                                 </span>
@@ -108,10 +107,10 @@ const Categories = () => {
                 confirmLoading={loading}
                 onCancel={onDeleteCancel}
             >
-                <p>{`Are you sure that you want to delete category "${selectedCategory.name}"`}</p>
+                <p>{`Are you sure that you want to delete sub category "${selectedSub.name}"`}</p>
             </Modal>
         </div >
     );
 };
 
-export default Categories;
+export default Subs;
