@@ -1,4 +1,5 @@
 const Category = require('../models/category');
+const Sub = require('../models/sub');
 const slugify = require('slugify');
 
 exports.create = async (req, res) => {
@@ -41,6 +42,29 @@ exports.read = async (req, res) => {
         // console.log(error);
         res.status(400).json({
             error: `Can not retrieve category :${req.params.slug}`
+        });
+    }
+};
+
+exports.getCategorySubs = async (req, res) => {
+    try {
+        const category = await Category
+            .findOne({ slug: req.params.slug })
+            .exec();
+        if (!category) {
+            res.status(404), json({
+                err: `Category '${req.params.slug}' not found`
+            });
+        } else {
+            const categorySubs = await Sub
+                .find({ parent: category._id })
+                .exec();
+            res.json(categorySubs);
+        }
+    } catch (error) {
+        // console.log(error);
+        res.status(400).json({
+            err: error.message
         });
     }
 };

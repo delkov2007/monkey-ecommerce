@@ -15,3 +15,18 @@ exports.create = async (req, res) => {
         });
     }
 };
+
+exports.readAll = async (req, res) => {
+    try {
+        const products = await Product
+            .find({})
+            .sort({ createdAt: -1 })
+            .exec();
+        res.json(products);
+    } catch (error) {
+        // console.log(error);
+        res.status(400).json({
+            err: 'Can not retreive categories.'
+        });
+    }
+};

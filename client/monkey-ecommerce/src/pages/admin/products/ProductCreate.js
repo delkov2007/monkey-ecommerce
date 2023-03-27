@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { brands, categories, colors, shipping } from "../../../common/constants/nomenclature.constants";
-import { getCategoryList } from "../../../functions/category";
+import { getCategoryList, getCategorySubs } from "../../../functions/category";
 import { createProduct } from "../../../functions/product";
 import { getSubList } from "../../../functions/sub";
 
@@ -29,17 +29,27 @@ const ProductCreate = () => {
     const [subList, setSubList] = useState([]);
 
     useEffect(() => {
-        const getCategoryList$ = getCategoryList(user.token);
-        const getSubCategoryList$ = getSubList(user.token);
-        Promise.all([getCategoryList$, getSubCategoryList$])
-            .then(([cat, subCat]) => {
+        getCategoryList(user.token)
+            .then((cat) => {
                 baseCategoryList
-                    .push(...cat.data.map(c => ({ value: c._id, label: c.name })));
+                    .push(...cat.data.map(c => ({ value: c._id, label: c.name, slug: c.slug })));
                 setCategoryList(baseCategoryList);
-                setSubList(subCat.data.map(s => ({ value: s._id, label: s.name })));
             });
 
     }, [user.token]);
+
+    useEffect(() => {
+        setFormValues({ ...formValues, ['subs']: [...initialFormValues.subs] });
+        const category = categoryList.find(c => c.value === formValues.category);
+        if (!category) return;
+        getCategorySubs(category.slug, user.token)
+            .then(res => {
+                setSubList(res.data.map(s => ({ value: s._id, label: s.name })));
+            })
+            .catch(err => {
+                toast.error(err.message);
+            });
+    }, [formValues.category]);
 
     const onFormChange = (e) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -136,7 +146,7 @@ const ProductCreate = () => {
                         size="large"
                         placeholder="--Please Select--"
                         className="w-100"
-                        defaultValue={formValues.category}
+                        value={formValues.category}
                         onSelect={onSelectCategory}
                         options={categoryList}
                     />
@@ -150,7 +160,7 @@ const ProductCreate = () => {
                         size="large"
                         placeholder="--Please Select--"
                         className="w-100"
-                        defaultValue={formValues.subs}
+                        value={formValues.subs}
                         onSelect={onSelectSubcategories}
                         onDeselect={onDeselectSubcategories}
                         options={subList}

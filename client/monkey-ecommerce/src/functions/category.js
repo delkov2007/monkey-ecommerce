@@ -25,4 +25,9 @@ const deleteCategory = async (slug, token) => {
     return await httpClient.remove(url, token);
 };
 
-export { createCategory, getCategoryList, getCategory, updateCategory, deleteCategory };
+const getCategorySubs = async (slug, token) => {
+    const url = `${categoryUrl}/${slug}/subs`;
+    return await httpClient.get(url, token);
+};
+
+export { createCategory, getCategoryList, getCategory, updateCategory, deleteCategory, getCategorySubs };
