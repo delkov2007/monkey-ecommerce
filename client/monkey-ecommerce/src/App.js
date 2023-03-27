@@ -8,8 +8,13 @@ import RequireAuth from "./components/guards/RequireAuth";
 import Layout from "./components/layouts/Layout";
 import { firebaseAuth } from "./firebase-auth";
 import { currentUser } from "./functions/auth";
-import Dashboard from "./pages/admin/Dashboard";
 import AdminView from "./pages/admin/AdminView";
+import Categories from "./pages/admin/categories/Categories";
+import CategoryUpdate from "./pages/admin/categories/CategoryUpdate";
+import Dashboard from "./pages/admin/Dashboard";
+import ProductCreate from "./pages/admin/products/ProductCreate";
+import Subs from "./pages/admin/subs/Subs";
+import SubUpdate from "./pages/admin/subs/SubUpdate";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -19,10 +24,6 @@ import Password from "./pages/user/Password";
 import UserView from "./pages/user/UserView";
 import Wishlist from "./pages/user/Wishlist";
 import { loggedInUser } from "./reducers/user-reducer";
-import Categories from "./pages/admin/categories/Categories";
-import CategoryUpdate from "./pages/admin/categories/CategoryUpdate";
-import SubUpdate from "./pages/admin/subs/SubUpdate";
-import Subs from "./pages/admin/subs/Subs";
 
 const {
     root,
@@ -100,7 +101,7 @@ const App = () => {
                         <Route path={dashboard} element={<Dashboard />} />
                     </Route>
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
-                        <Route path={product} element={<h1>Product</h1>} />
+                        <Route path={product} element={<ProductCreate />} />
                     </Route>
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
                         <Route path={products} element={<h1>Products</h1>} />
