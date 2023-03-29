@@ -1,4 +1,4 @@
-import { Button, Input, Select } from "antd";
+import { Button, Input, Select, Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -6,14 +6,14 @@ import { toast } from "react-toastify";
 import { brands, categories, colors, shipping } from "../../../common/constants/nomenclature.constants";
 import { getCategoryList, getCategorySubs } from "../../../functions/category";
 import { createProduct } from "../../../functions/product";
-import { getSubList } from "../../../functions/sub";
+import FileUpload from "../../../components/file-upload/FileUpload";
 
 const initialFormValues = {
     title: '',
     description: '',
     price: 0,
     category: '',
-    subs: [],
+    sub: [],
     shipping: '',
     quantity: 0,
     images: [],
@@ -27,6 +27,7 @@ const ProductCreate = () => {
     const [formValues, setFormValues] = useState(initialFormValues);
     const [categoryList, setCategoryList] = useState([]);
     const [subList, setSubList] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         getCategoryList(user.token)
@@ -39,7 +40,7 @@ const ProductCreate = () => {
     }, [user.token]);
 
     useEffect(() => {
-        setFormValues({ ...formValues, ['subs']: [...initialFormValues.subs] });
+        setFormValues({ ...formValues, ['sub']: [...initialFormValues.sub] });
         const category = categoryList.find(c => c.value === formValues.category);
         if (!category) return;
         getCategorySubs(category.slug, user.token)
@@ -60,13 +61,13 @@ const ProductCreate = () => {
     };
 
     const onSelectSubcategories = (value) => {
-        const subs = formValues.subs;
-        setFormValues({ ...formValues, ['subs']: [...subs, value] });
+        const sub = formValues.sub;
+        setFormValues({ ...formValues, ['sub']: [...sub, value] });
     };
 
     const onDeselectSubcategories = (value) => {
-        const subs = formValues.subs;
-        setFormValues({ ...formValues, ['subs']: subs.filter(s => s !== value) });
+        const sub = formValues.sub;
+        setFormValues({ ...formValues, ['sub']: sub.filter(s => s !== value) });
     };
 
     const onSelectShipping = (value) => {
@@ -96,7 +97,12 @@ const ProductCreate = () => {
 
     return (
         <div className="container mt-3">
-            <h4 className="pt-3">Create Product</h4>
+            <h4 className="pt-3">Create Product {loading && <Spin size="default" />} </h4>
+            <FileUpload
+                formValues={formValues}
+                setFormValues={setFormValues}
+                setLoading={setLoading}
+            />
             <form>
                 <div className="form-group">
                     <label htmlFor="productTitle">Title</label>
@@ -160,7 +166,7 @@ const ProductCreate = () => {
                         size="large"
                         placeholder="--Please Select--"
                         className="w-100"
-                        value={formValues.subs}
+                        value={formValues.sub}
                         onSelect={onSelectSubcategories}
                         onDeselect={onDeselectSubcategories}
                         options={subList}
