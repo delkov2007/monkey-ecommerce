@@ -13,6 +13,7 @@ import Categories from "./pages/admin/categories/Categories";
 import CategoryUpdate from "./pages/admin/categories/CategoryUpdate";
 import Dashboard from "./pages/admin/Dashboard";
 import ProductCreate from "./pages/admin/products/ProductCreate";
+import Products from "./pages/admin/products/Products";
 import Subs from "./pages/admin/subs/Subs";
 import SubUpdate from "./pages/admin/subs/SubUpdate";
 import ForgotPassword from "./pages/auth/ForgotPassword";
@@ -104,7 +105,7 @@ const App = () => {
                         <Route path={product} element={<ProductCreate />} />
                     </Route>
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
-                        <Route path={products} element={<h1>Products</h1>} />
+                        <Route path={products} element={<Products />} />
                     </Route>
                     <Route element={<RequireAuth allowedRoles={[USER_ROLES.admin]} />} >
                         <Route path={category} element={<Categories />} />

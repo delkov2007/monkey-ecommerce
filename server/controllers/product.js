@@ -20,6 +20,9 @@ exports.readAll = async (req, res) => {
     try {
         const products = await Product
             .find({})
+            .limit(parseInt(req.params.count))
+            .populate('category')
+            .populate('sub')
             .sort({ createdAt: -1 })
             .exec();
         res.json(products);

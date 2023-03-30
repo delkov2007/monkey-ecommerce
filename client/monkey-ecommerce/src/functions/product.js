@@ -10,6 +10,10 @@ const getProductList = async (token) => {
     return await httpClient.get(productUrl, token);
 };
 
+const getProductListByCount = async (token, count) => {
+    return await httpClient.get(`${productUrl}/${count}`, token);
+};
+
 const getProduct = async (slug, token) => {
     const url = `${productUrl}/${slug}`;
     return await httpClient.get(url, token);
@@ -25,4 +29,4 @@ const deleteProduct = async (slug, token) => {
     return await httpClient.remove(url, token);
 };
 
-export { createProduct, getProductList, getProduct, updateProduct, deleteProduct };
+export { createProduct, getProductList, getProductListByCount, getProduct, updateProduct, deleteProduct };
