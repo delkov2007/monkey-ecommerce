@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useStore } from "react-redux";
+import { useSelector } from "react-redux";
 import AdminProductCard from "../../../components/cards/AdminProductCard";
 import Spinner from "../../../components/Spinner";
 import { getProductListByCount } from "../../../functions/product";
 
 const Products = () => {
-    const user = useStore(state => ({ ...state }));
+    const user = useSelector(state => ({ ...state.user }));
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState([]);
 
@@ -36,8 +36,11 @@ const Products = () => {
                     <div className="row mt-3">
                         {
                             products && products.length && products.map(product => (
-                                <div className="col-sm-12 col-md-6 col-lg-3 mb-3">
-                                    <AdminProductCard key={product._id} product={product} />
+                                <div
+                                    className="col-sm-12 col-md-6 col-lg-3 mb-3"
+                                    key={product._id}
+                                >
+                                    <AdminProductCard product={product} />
                                 </div>
                             ))
                         }

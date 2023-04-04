@@ -15,7 +15,7 @@ const getProductListByCount = async (token, count) => {
 };
 
 const getProduct = async (slug, token) => {
-    const url = `${productUrl}/${slug}`;
+    const url = `${productUrl}/${slug}/details`;
     return await httpClient.get(url, token);
 };
 
